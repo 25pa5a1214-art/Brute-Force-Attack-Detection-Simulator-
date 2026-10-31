@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Brute-Force Detection Simulator</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+
+    <header>
+        <h1>Brute-Force Detection Simulator</h1>
+        <p>Cybersecurity Monitoring Dashboard</p>
+    </header>
+
+    <main>
+
+        <section class="card">
+            <h2>Demo Login</h2>
+
+            <p>Enter demo credentials to simulate login activity.</p>
+
+            {% if message %}
+                <div class="message {{ message_type }}">
+                    {{ message }}
+                </div>
+            {% endif %}
+
+            <form method="POST" action="/">
+
+                <label for="username">Username</label>
+
+                <input
+                    id="username"
+                    type="text"
+                    name="username"
+                    maxlength="50"
+                    required
+                >
+
+                <label for="password">Password</label>
+
+                <input
+                    id="password"
+                    type="password"
+                    name="password"
+                    maxlength="200"
+                    required
+                >
+
+                <button type="submit">Simulate Login</button>
+
+            </form>
+
+            <div class="demo-info">
+                <h3>Demo Credentials</h3>
+
+                <p><strong>Username:</strong> admin</p>
+                <p><strong>Password:</strong> DemoAdmin123!</p>
+
+                <hr>
+
+                <p><strong>Username:</strong> student</p>
+                <p><strong>Password:</strong> DemoStudent123!</p>
+            </div>
+        </section>
+
+
+        <section class="card">
+            <h2>Detection Configuration</h2>
+
+            <div class="stats">
+
+                <div class="stat">
+                    <h3>{{ max_failures }}</h3>
+                    <p>Failure Threshold</p>
+                </div>
+
+                <div class="stat">
+                    <h3>{{ window_seconds }}s</h3>
+                    <p>Detection Window</p>
+                </div>
+
+            </div>
+
+            <p>
+                A security alert is generated after five failed login
+                attempts within 60 seconds for the same username.
+            </p>
+
+            <form method="POST" action="/reset">
+                <button class="reset-button" type="submit">
+                    Reset Simulation
+                </button>
+            </form>
+        </section>
+
+
+        <section class="card">
+            <h2>Security Alerts</h2>
+
+            {% if alerts %}
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Username</th>
+                                <th>Alert Details</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for alert in alerts %}
+                                <tr>
+                                    <td>{{ alert.time }}</td>
+                                    <td>{{ alert.username }}</td>
+                                    <td class="alert-text">
+                                        {{ alert.message }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            {% else %}
+
+                <p>No security alerts detected yet.</p>
+
+            {% endif %}
+        </section>
+
+
+        <section class="card">
+            <h2>Recent Login Events</h2>
+
+            {% if events %}
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Username</th>
+                                <th>Status</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for event in events %}
+                                <tr>
+                                    <td>{{ event.time }}</td>
+                                    <td>{{ event.username }}</td>
+
+                                    <td>
+                                        <span class="status {{ event.status|lower }}">
+                                            {{ event.status }}
+                                        </span>
+                                    </td>
+
+                                    <td>{{ event.message }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            {% else %}
+
+                <p>No login events recorded yet.</p>
+
+            {% endif %}
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Educational Cybersecurity Project | Local Demo Only</p>
+    </footer>
+
+</body>
+</html>
